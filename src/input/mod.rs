@@ -1,4 +1,4 @@
-mod read_files;
+pub mod read_files;
 
 // enum FilesReadMode {
 //     Sequentially,
