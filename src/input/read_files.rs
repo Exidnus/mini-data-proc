@@ -2,6 +2,7 @@ use std::io;
 use std::io::prelude::*;
 use std::io::{BufReader, Lines};
 use std::fs::File;
+use std::fs;
 use notify::{DebouncedEvent, RecommendedWatcher, Watcher, watcher, RecursiveMode};
 use std::time::Duration;
 use std::sync::mpsc::channel;
@@ -19,7 +20,7 @@ pub fn test() {
 
     let (tx, rx) = channel();
     let mut watcher = watcher(tx, Duration::from_secs(1)).unwrap();
-    watcher.watch("/home/dmitriy_varygin/test2/test_watcher", RecursiveMode::NonRecursive).unwrap();
+    watcher.watch("/home/dvarygin/test2/test_watcher", RecursiveMode::NonRecursive).unwrap();
 
     loop {
         match rx.recv() {
@@ -27,11 +28,10 @@ pub fn test() {
                 if let DebouncedEvent::Create(path_to_file) = event {
                     match path_to_file.into_os_string().into_string() {
                         Ok(str_path_to_file) =>
-                            executor.execute(move || { read_to_stdout_with_logging(str_path_to_file) })
+                            executor.execute(move || { read_to_stdout_with_logging(str_path_to_file) }),
                         Err(os_string) =>
                             println!("Can't convert {:?} to string.", os_string)
                     }
-                    executor.execute(move || { read_to_stdout(path_to_file.into_os_string().in) })
                 } else {
                     println!("{:?}", event)
                 }
@@ -48,9 +48,8 @@ fn read_to_stdout_with_logging(path_to_file: String) {
 }
 
 fn read_to_stdout(path_to_file: String) -> io::Result<()> {
-    let mut file = File::open(path_to_file)?;
-    let &mut result = String::new();
-    file.read_to_string(result)?;
+    let result = fs::read_to_string(path_to_file)?;
+    println!("Content:\n {}", result);
 
     Ok(())
 }
