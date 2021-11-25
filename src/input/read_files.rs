@@ -2,7 +2,7 @@ use std::io;
 use std::io::prelude::*;
 use std::io::{BufReader, Lines};
 use std::fs::File;
-use notify::{RecommendedWatcher, Watcher, watcher, RecursiveMode};
+use notify::{Watcher, watcher, RecursiveMode};
 use std::time::Duration;
 use std::sync::mpsc::channel;
 
