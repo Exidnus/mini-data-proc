@@ -8,6 +8,10 @@ use std::time::Duration;
 use std::sync::mpsc::channel;
 use threadpool::ThreadPool;
 
+trait FileReader {
+    fn read(path_to_file: String) ->
+}
+
 pub fn exhaustive_iterator(path_to_file: String) -> io::Result<Lines<BufReader<File>>> {
     let file = File::open(path_to_file)?;
     let reader = BufReader::new(file);
